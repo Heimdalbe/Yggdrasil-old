@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^12.2.0",
+    "discord.js": "^11.6.2",
     "discord.js-commando": "^0.10.0",
-    "fs": "^0.0.1-security"
+    "dotenv": "^8.2.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
   },
   "devDependencies": {},
   "scripts": {
