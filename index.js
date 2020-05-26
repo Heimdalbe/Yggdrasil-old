@@ -13,7 +13,7 @@ const client = new commando.CommandoClient({
 module.exports = client;
 
 client.registry.registerDefaults();
-//client.registry.registerCommandsIn(path.join(__dirname, "/commands"));
+client.registry.registerCommandsIn(path.join(__dirname, "/commands"));
 
 client.on("ready", () => {
   console.log("Derp");
