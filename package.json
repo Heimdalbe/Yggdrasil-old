@@ -1,5 +1,5 @@
 {
-  "name": "heimdal-discord-bot",
+  "name": "yggdrasil",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Heimdalbe/heimdal-discord-bot.git"
+    "url": "git+https://github.com/Heimdalbe/Yggdrasil.git"
   },
-  "author": "",
+  "author": "Nick Lersberghe/nlersber/Lazoh",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Heimdalbe/heimdal-discord-bot/issues"
+    "url": "https://github.com/Heimdalbe/Yggdrasil.git/issues"
   },
-  "homepage": "https://github.com/Heimdalbe/heimdal-discord-bot#readme"
+  "homepage": "https://github.com/Heimdalbe/Yggdrasil.git#readme"
 }
