@@ -24,36 +24,61 @@ module.exports = class ClearCommand extends commando.Command {
           "You need Admin Permissions to run this command. Your command and this message will automatically self-destruct in 5 seconds."
         )
         .then((t) => {
-          t.delete(10000); //Delete reply
-          message.delete(10000); //Delete original command
+          t.delete(5000); //Delete reply
+          message.delete(5000); //Delete original command
           return;
         });
     }
+    if (args.trim() === "") {
+      args = "";
+      this.argsCount = 0;
+    } else {
+      args = args.trim().split(" ");
+      this.argsCount = args.length;
+    }
 
-    args=args.trim().split(" ")
-    console.log(!!args);
-    console.log(Array.isArray(args));
-    console.log(args.length);
-
-
-    if (args.length!==1) {
-      console.log("argcount fucked");
-      //Too few or too many
+    //Check arg count
+    if (this.argsCount !== 1)
       message
         .reply(
           "This command " +
-            (this.argsCount === 0 ? "only " : "") +
-            "needs to know how many messages should be deleted. Please provide a number or 'all' to clear all messages. \nYour command and this message will automatically self-destruct in 5 seconds."
+            (this.argsCount === 0 ? "" : "only ") +
+            "needs to know how many messages should be deleted. The upper limit is 100 (API restrictions). " +
+            "\nYour command and this message will automatically self-destruct in 10 seconds."
         )
         .then((t) => {
           t.delete(10000); //Delete reply
           message.delete(10000); //Delete original command
           return;
         });
-    }
 
-    console.log("derp");
+    args = args[0];
+
     //Check if command was not sent in DM
-    if (message.channel) return;
-  }
+    if (message.channel.type !== "text")
+      message
+        .reply(
+          "This command is meant to clear text channels only! This message and the command will automatically self-destruct in 5 seconds"
+        )
+        .then((t) => {
+          t.delete(5000); //Delete reply
+          message.delete(5000); //Delete original command
+          return;
+        });
+
+    if (isNaN(args) || args < 1 || args > 100)
+      message
+        .reply(
+          "Please provide a valid number between 0 (exclusive) and 100 (inclusive). This message and the command will automatically self-destruct in 5 seconds"
+        )
+        .then((t) => {
+          t.delete(5000); //Delete reply
+          message.delete(5000); //Delete original command
+          return;
+        });
+
+    message.channel.messages
+      .fetchMessages({ limit: args })
+      .then((s) => message.channel.bulkDelete(s));//TODO Fix
+  } //End of method
 };
