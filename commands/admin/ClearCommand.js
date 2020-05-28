@@ -11,7 +11,7 @@ module.exports = class ClearCommand extends commando.Command {
     });
   }
 
-  run(message, args) {
+  async run(message, args) {
     //Check if command user has Administrator permissions
     let isAdmin = message.channel
       .permissionsFor(message.member)
@@ -66,6 +66,7 @@ module.exports = class ClearCommand extends commando.Command {
           return;
         });
 
+    //Check if arg is valid and within valid range
     if (isNaN(args) || args < 1 || args > 100)
       message
         .reply(
@@ -77,8 +78,11 @@ module.exports = class ClearCommand extends commando.Command {
           return;
         });
 
-    message.channel.messages
+    await message.delete(); //Delete command message before fetching
+
+    message.channel
       .fetchMessages({ limit: args })
-      .then((s) => message.channel.bulkDelete(s));//TODO Fix
+      .then((s) => message.channel.bulkDelete(s));
+    //TODO Fix
   } //End of method
 };
