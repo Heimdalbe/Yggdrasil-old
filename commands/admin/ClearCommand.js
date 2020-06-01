@@ -1,4 +1,5 @@
 const commando = require("discord.js-commando");
+const helper = require("../../domain/CommandHelper");
 
 module.exports = class ClearCommand extends commando.Command {
   constructor(client) {
@@ -18,17 +19,13 @@ module.exports = class ClearCommand extends commando.Command {
       .has("ADMINISTRATOR", true);
 
     if (!isAdmin) {
-      console.log("Not an admin");
-      message
-        .reply(
-          "You need Admin Permissions to run this command. Your command and this message will automatically self-destruct in 5 seconds."
-        )
-        .then((t) => {
-          t.delete(5000); //Delete reply
-          message.delete(5000); //Delete original command
-          return;
-        });
+      helper.replyThenDeleteBoth(
+        "You need Admin Permissions to run this command. Your command and this message will automatically self-destruct in 5 seconds.",
+        5000
+      );
+      return;
     }
+
     if (args.trim() === "") {
       args = "";
       this.argsCount = 0;
@@ -38,45 +35,36 @@ module.exports = class ClearCommand extends commando.Command {
     }
 
     //Check arg count
-    if (this.argsCount !== 1)
-      message
-        .reply(
-          "This command " +
-            (this.argsCount === 0 ? "" : "only ") +
-            "needs to know how many messages should be deleted. The upper limit is 100 (API restrictions). " +
-            "\nYour command and this message will automatically self-destruct in 10 seconds."
-        )
-        .then((t) => {
-          t.delete(10000); //Delete reply
-          message.delete(10000); //Delete original command
-          return;
-        });
+    if (this.argsCount !== 1) {
+      helper.replyThenDeleteBoth(
+        "This command " +
+          (this.argsCount === 0 ? "" : "only ") +
+          "needs to know how many messages should be deleted. The upper limit is 100 (API restrictions). " +
+          "\nYour command and this message will automatically self-destruct in 10 seconds.",
+        10000
+      );
+      return;
+    }
 
     args = args[0];
 
     //Check if command was not sent in DM
-    if (message.channel.type !== "text")
-      message
-        .reply(
-          "This command is meant to clear text channels only! This message and the command will automatically self-destruct in 5 seconds"
-        )
-        .then((t) => {
-          t.delete(5000); //Delete reply
-          message.delete(5000); //Delete original command
-          return;
-        });
+    if (message.channel.type !== "text") {
+      helper.replyThenDeleteBoth(
+        "This command is meant to clear text channels only! This message and the command will automatically self-destruct in 5 seconds",
+        5000
+      );
+      return;
+    }
 
     //Check if arg is valid and within valid range
-    if (isNaN(args) || args < 1 || args > 100)
-      message
-        .reply(
-          "Please provide a valid number between 0 (exclusive) and 100 (inclusive). This message and the command will automatically self-destruct in 5 seconds"
-        )
-        .then((t) => {
-          t.delete(5000); //Delete reply
-          message.delete(5000); //Delete original command
-          return;
-        });
+    if (isNaN(args) || args < 1 || args > 100) {
+      helper.replyThenDeleteBoth(
+        "Please provide a valid number between 0 (exclusive) and 100 (inclusive). This message and the command will automatically self-destruct in 5 seconds",
+        5000
+      );
+      return;
+    }
 
     await message.delete(); //Delete command message before fetching
 

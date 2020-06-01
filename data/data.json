@@ -1,3 +1,4 @@
 {
-    "guildID": 0
+    "guildID": 0,
+    "defaultChannel": 0
 }
