@@ -11,8 +11,7 @@ module.exports = class InviteTimer {
   }
 
   activate() {
-    const timeToGo = time - Date.now();
-    this.timer = rxjs.timer(timeToGo);
+    this.timer = rxjs.timer(time * 1000); //Seconds to milliseconds
     this.timer.subscribe((s) => {
       this.member.kick(
         "Your membership for this server has expired. If you think this is not correct, ask the Admin for a permanent invite."

@@ -18,6 +18,11 @@ class InviteManager {
     return this.invites.some((s) => s.code === code);
   }
 
+  addInvite(invite, member) {
+    if (this.checkIfPresent(invite.code)) return;
+    this.invites.push(invite);
+  }
+
   activateTimer(code, member) {
     const inv = this.invites.find((s) => s.code === code);
     if (!!!inv) return;
