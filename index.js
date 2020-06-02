@@ -32,7 +32,11 @@ client.on("ready", () => {
 
   wait(1000);
 
-  data.guildID = client.guilds.first().id; //Saves ID of server
+  let guild = client.guilds.first();
+  data.guildID = guild.id; //Saves ID of server
+  data.defaultChannel = "716801655169089577";
+
+  fs.writeFileSync("./data/data.json", JSON.stringify(data));
 
   // Load invites for guild and save them to the cache.
   client.guilds.find((s) => (invites[data.guildID] = s));

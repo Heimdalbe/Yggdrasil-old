@@ -20,6 +20,7 @@ module.exports = class ClearCommand extends commando.Command {
 
     if (!isAdmin) {
       helper.replyThenDeleteBoth(
+        message,
         "You need Admin Permissions to run this command. Your command and this message will automatically self-destruct in 5 seconds.",
         5000
       );
@@ -37,6 +38,7 @@ module.exports = class ClearCommand extends commando.Command {
     //Check arg count
     if (this.argsCount !== 1) {
       helper.replyThenDeleteBoth(
+        message,
         "This command " +
           (this.argsCount === 0 ? "" : "only ") +
           "needs to know how many messages should be deleted. The upper limit is 100 (API restrictions). " +
@@ -51,6 +53,7 @@ module.exports = class ClearCommand extends commando.Command {
     //Check if command was not sent in DM
     if (message.channel.type !== "text") {
       helper.replyThenDeleteBoth(
+        message,
         "This command is meant to clear text channels only! This message and the command will automatically self-destruct in 5 seconds",
         5000
       );
@@ -60,6 +63,7 @@ module.exports = class ClearCommand extends commando.Command {
     //Check if arg is valid and within valid range
     if (isNaN(args) || args < 1 || args > 100) {
       helper.replyThenDeleteBoth(
+        message,
         "Please provide a valid number between 0 (exclusive) and 100 (inclusive). This message and the command will automatically self-destruct in 5 seconds",
         5000
       );
