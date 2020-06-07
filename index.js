@@ -60,4 +60,14 @@ client.on("guildMemberAdd", (member) => {
   });
 });
 
+const forbiddenWords = ["@here", "@everyone"]
+client.on('message', message => {
+  console.log(message.content)
+  if (forbiddenWords.includes(message.content.toLowerCase())) {
+    message.delete().then(s => {
+      message.author.send("It seems like you're trying to use " + message.content)
+    })
+  }
+})
+
 client.login(process.env.TOKEN);
