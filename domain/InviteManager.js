@@ -11,7 +11,7 @@ class InviteManager {
   }
 
   _checkForExistingInvites() {
-    data.invites.forEach((s) => this.invites.push(new Invite(s.code, s.time)));
+    data.forEach((s) => this.invites.push(new Invite(s.code, s.time)));
   }
 
   checkIfPresent(code) {
@@ -21,12 +21,14 @@ class InviteManager {
   addInvite(invite, member) {
     if (this.checkIfPresent(invite.code)) return;
     this.invites.push(invite);
+    this._persist();
   }
 
   activateTimer(code, member) {
     const inv = this.invites.find((s) => s.code === code);
     if (!!!inv) return;
-
+    console.log("About to activate timer");
+    console.log(member);
     const timer = new InviteTimer(member, inv.time, this);
     this.timers.push(timer);
     timer.activate().subscribe((s) => this.timers.filter((t) => t !== timer)); //Remove when fired
@@ -34,7 +36,11 @@ class InviteManager {
 
   removeInvite(code) {
     this.invites.filter((s) => s.code !== code);
-    fs.writeFileSync("../data/invites.json", JSON.stringify(this.invites));
+    this._persist();
+  }
+
+  _persist() {
+    fs.writeFileSync("./data/invites.json", JSON.stringify(this.invites));
   }
 }
 

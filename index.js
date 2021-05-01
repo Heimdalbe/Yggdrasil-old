@@ -32,32 +32,52 @@ client.on("ready", () => {
 
   wait(1000);
 
-  let guild = client.guilds.first();
+  let guild = client.guilds.cache.first();
   data.guildID = guild.id; //Saves ID of server
   data.defaultChannel = "716801655169089577";
 
   fs.writeFileSync("./data/data.json", JSON.stringify(data));
 
   // Load invites for guild and save them to the cache.
-  client.guilds.find((s) => (invites[data.guildID] = s));
+  // client.guilds.cache.find((s) => (invites[data.guildID] = s));
+  guild.fetchInvites().then((s) => (invites[data.guildID] = s));
 });
+
+client.on("error", console.error);
 
 client.on("guildMemberAdd", (member) => {
   // To compare, we need to load the current invite list.
   member.guild.fetchInvites().then((guildInvites) => {
     // This is the *existing* invites for the guild.
     const ei = invites[member.guild.id];
+
     // Update the cached invites for the guild.
     invites[member.guild.id] = guildInvites;
-    // Look through the invites, find the one for which the uses went up.
-    const invite = guildInvites.find((i) => ei.get(i.code).uses < i.uses);
 
-    console.log(invite.code);
+    console.log(ei);
+    // Look through the invites, find the one for which the uses went up.
+    const invite = guildInvites.find((i) => ei.get(i.code)?.uses < i.uses);
+
+    console.log(member);
 
     if (inviteManager.checkIfPresent(invite.code)) {
-      inviteManager.activateTimer(invite.code);
+      inviteManager.activateTimer(invite.code, member);
+      console.log("Timer activated");
+      invite.delete(); // Deletes invite so can only be used once
     }
   });
 });
+
+// Register all off-file event listeners
+
+const eventFiles = fs
+  .readdirSync("./events")
+  .filter((file) => file.endsWith(".js"));
+
+for (const file of eventFiles) {
+  const event = require(`./events/${file}`);
+  if (event.once) client.once(event.name, (...args) => event.execute(...args));
+  else client.on(event.name, (...args) => event.execute(...args));
+}
 
 client.login(process.env.TOKEN);

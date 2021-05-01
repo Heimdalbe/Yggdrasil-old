@@ -11,11 +11,12 @@ module.exports = class InviteTimer {
   }
 
   activate() {
-    this.timer = rxjs.timer(time * 1000); //Seconds to milliseconds
+    this.timer = rxjs.timer(this.time * 1000); //Seconds to milliseconds
     this.timer.subscribe((s) => {
       this.member.kick(
         "Your membership for this server has expired. If you think this is not correct, ask the Admin for a permanent invite."
       );
+      this.endSignal.next("")
     });
     return this.endSignal;
   }
