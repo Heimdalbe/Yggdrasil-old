@@ -6,7 +6,11 @@ module.exports = {
   execute(oldState, newState) {
     // !!!newState means a disconnect, equal states channelID means no channel changes
     // No channelID means join, else it's changing channel
-    if (!!!newState.channelID || oldState?.channelID === newState?.channelID)
+    if (
+      !!!newState.channelID ||
+      oldState?.channelID === newState?.channelID ||
+      newState.member.user.bot
+    )
       return;
     activityManager.update(
       new Activity.User(newState.member.user.tag, Activity.Type.VOICE)

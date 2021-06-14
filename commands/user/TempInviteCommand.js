@@ -1,9 +1,10 @@
 const fs = require("fs");
+const clipboardy = require("clipboardy");
+const commando = require("discord.js-commando");
+
 const inviteManager = require("../../domain/InviteManager");
 const data = require("../../data/data.json");
 const helper = require("../../domain/CommandHelper");
-const commando = require("discord.js-commando");
-const clipboardy = require("clipboardy");
 const Invite = require("../../domain/models/Invite");
 
 module.exports = class TempInviteCommand extends (
@@ -50,7 +51,7 @@ module.exports = class TempInviteCommand extends (
     let hours = 0;
     let minutes = 0;
 
-    const reg = new RegExp("(\\d[wdhm])+(\\s+\\d[wdhm])*", "i");
+    const reg = new RegExp("(([1-9]\\d*)[wdhm])(\\s+([1-9]\\d*)[wdhm])*");
 
     if (args.trim() === "") days = 1;
     else {

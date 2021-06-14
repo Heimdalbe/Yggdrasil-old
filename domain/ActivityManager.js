@@ -21,14 +21,21 @@ class ActivityManager {
    * @param {string} tag Tag of the user (Name#xxxx)
    */
   get(tag) {
-    return this.activities[tag];
+    if (!!!this.activities[tag]) return `User ${tag} could not be found!`;
+    return Object.setPrototypeOf(
+      this.activities[tag],
+      ActivityUser.User.prototype
+    );
+  }
+
+  getAll() {
+    return this.activities;
   }
 
   /**
    * Internal use only
    */
   _persist() {
-    console.log(JSON.stringify(this.activities));
     fs.writeFileSync("./data/activity.json", JSON.stringify(this.activities));
   }
 }

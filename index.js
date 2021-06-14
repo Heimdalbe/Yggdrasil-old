@@ -28,12 +28,15 @@ client.registry
 const invites = {};
 
 client.on("ready", () => {
+  // Wait for the bot to load completely
   console.log("Ready to go");
-
   wait(1000);
 
+  // Load default information. Bot is made to work on a single server only
   let guild = client.guilds.cache.first();
   data.guildID = guild.id; //Saves ID of server
+
+  //Refactor to let this be set
   data.defaultChannel = "716801655169089577";
 
   fs.writeFileSync("./data/data.json", JSON.stringify(data));
@@ -44,6 +47,7 @@ client.on("ready", () => {
 });
 
 client.on("error", console.error);
+
 
 client.on("guildMemberAdd", (member) => {
   // To compare, we need to load the current invite list.
